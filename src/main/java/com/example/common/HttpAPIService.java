@@ -1,6 +1,8 @@
 package com.example.common;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -8,11 +10,13 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -53,24 +57,57 @@ public class HttpAPIService {
         }
         return null;
     }
-    /**
-     * 带参数的get请求，如果状态码为200，则返回body，如果不为200，则返回null
-     *
-     * @param url
-     * @return
-     * @throws Exception
-     */
-    public String doGet(String url, Map<String, Object> map) throws Exception {
-        URIBuilder uriBuilder = new URIBuilder(url);
 
-        if (map != null) {
-            // 遍历map,拼接请求参数
-            for (Map.Entry<String, Object> entry : map.entrySet()) {
-                uriBuilder.setParameter(entry.getKey(), entry.getValue().toString());
+//    /**
+//     * 带参数的get请求，如果状态码为200，则返回body，如果不为200，则返回null
+//     *
+//     * @param url
+//     * @return
+//     * @throws Exception
+//     */
+//    public String doGet(String url, Map<String, Object> map) throws Exception {
+//        URIBuilder uriBuilder = new URIBuilder(url);
+//
+//        if (map != null) {
+//            // 遍历map,拼接请求参数
+//            for (Map.Entry<String, Object> entry : map.entrySet()) {
+//                uriBuilder.setParameter(entry.getKey(), entry.getValue().toString());
+//            }
+//        }
+//        // 调用不带参数的get请求
+//        return this.doGet(uriBuilder.build().toString());
+//    }
+    public String get(String Url) throws IOException {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        //创建httpGet
+        HttpGet httpGet = new HttpGet(Url);
+        System.out.println("URL is " + httpGet.getURI());
+        CloseableHttpResponse response = null;
+        try {
+            //执行http请求
+            response = httpClient.execute(httpGet);
+            //获取http响应体
+            HttpEntity entity = response.getEntity();
+            System.out.println("-----------------");
+            //打印响应状态
+            System.out.println(response.getStatusLine());
+            if (entity != null) {
+                System.out.println("Response Content Length:" + entity.getContentLength());
+                String content = EntityUtils.toString(entity);
+                System.out.println("Response Content:" + content);
+                return content;
             }
+            System.out.println("啦啦啦啦,我是~~~");
+
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            response.close();
+            httpClient.close();
         }
-        // 调用不带参数的get请求
-        return this.doGet(uriBuilder.build().toString());
+        return null;
     }
 
     /**
@@ -95,11 +132,9 @@ public class HttpAPIService {
             }
             // 构造from表单对象
             UrlEncodedFormEntity urlEncodedFormEntity = new UrlEncodedFormEntity(list, "UTF-8");
-
             // 把表单放到post里
             httpPost.setEntity(urlEncodedFormEntity);
         }
-
         // 发起请求
         CloseableHttpResponse response = this.httpClient.execute(httpPost);
         return new HttpResult(response.getStatusLine().getStatusCode(), EntityUtils.toString(

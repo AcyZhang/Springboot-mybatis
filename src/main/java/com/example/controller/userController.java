@@ -28,6 +28,7 @@ import java.util.Map;
 /**
  * Created by AcY on 2018/4/25.
  */
+
 @Controller
 @RequestMapping("/boot")
 @Component
@@ -66,16 +67,18 @@ public class userController {
      * @throws Exception
      */
     @RequestMapping("httpc")
+    @ResponseBody
     public String httptest() throws Exception {
-        String str = httpAPIService.doGet("http://127.0.0.1:8080/boot/sss");
+        String str = httpAPIService.get("http://127.0.0.1:8080/boot/sss");
+     //  String str =httpAPIService.get("http://www.jianshu.com");
         System.out.println(str);
-        return "sel";
+        return str;
     }
 
 
-    @RequestMapping(value = "/index")
-    public @ResponseBody
-    String uploadImg(User user, @RequestParam("attachs") MultipartFile file,
+    @RequestMapping(value = "/index",method = RequestMethod.POST)
+     @ResponseBody
+    public  String uploadImg(User user, @RequestParam("attachs") MultipartFile file,
                      HttpServletRequest request) {
         String contentType = file.getContentType();
         boolean flag = true;
