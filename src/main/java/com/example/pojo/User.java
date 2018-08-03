@@ -8,15 +8,11 @@ public class User  {
 	private String name;
 
 	private Integer age;
-
+	private String imgpath;
 	public User() {
 	};
 
-	public User(Integer id, String name, Integer age) {
-		this.id = id;
-		this.name = name;
-		this.age = age;
-	}
+
 
 	public Integer getId() {
 		return id;
@@ -43,12 +39,18 @@ public class User  {
 		this.age = age;
 	}
 
-	@Override
-	public String toString() {
-		return "User{" +
-				"id=" + id +
-				", name='" + name + '\'' +
-				", age=" + age +
-				'}';
+	public User(Integer id, String name, Integer age, String imgpath) {
+		this.id = id;
+		this.name = name;
+		this.age = age;
+		this.imgpath = imgpath;
+	}
+
+	public String getImgpath() {
+		return imgpath;
+	}
+
+	public void setImgpath(String imgpath) {
+		this.imgpath = imgpath;
 	}
 }

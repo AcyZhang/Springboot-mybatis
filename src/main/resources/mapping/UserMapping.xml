@@ -5,6 +5,13 @@
 	<select id="getUsers" resultType="com.example.pojo.User">
 		select * from user
 	</select>
-
-
-</mapper>  
+	<insert id="dubAdd" parameterType="com.example.pojo.User">
+		insert into user(name,age,imgpath) values (#{name},#{age},#{imgpath})
+	</insert>
+	<delete id="DelDub" >
+		delete from user where id=#{id}
+	</delete>
+	<select id="getUpDub" resultType="com.example.pojo.User">
+		select * from user where id=#{id}
+	</select>
+</mapper>
