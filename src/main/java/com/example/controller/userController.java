@@ -63,23 +63,24 @@ public class userController {
 
     /**
      * 通过http请求返回数据
+     *
      * @return
      * @throws Exception
      */
-    @RequestMapping("httpc")
+    @RequestMapping("/httpc")
     @ResponseBody
-    public String httptest() throws Exception {
-        String str = httpAPIService.get("http://127.0.0.1:8080/boot/sss");
-     //  String str =httpAPIService.get("http://www.jianshu.com");
+    public String httpc() throws Exception {
+        String str = httpAPIService.get("http://127.0.0.1:8080/boot/login");
+        //  String str =httpAPIService.get("http://www.jianshu.com");
         System.out.println(str);
         return str;
     }
 
 
-    @RequestMapping(value = "/index",method = RequestMethod.POST)
-     @ResponseBody
-    public  String uploadImg(User user, @RequestParam("attachs") MultipartFile file,
-                     HttpServletRequest request) {
+    @RequestMapping(value = "/index", method = RequestMethod.POST)
+//     @ResponseBody
+    public String uploadImg(User user, @RequestParam("attachs") MultipartFile file,
+                            HttpServletRequest request) {
         String contentType = file.getContentType();
         boolean flag = true;
         String fileName = file.getOriginalFilename();
@@ -90,10 +91,10 @@ public class userController {
 
         }
         if (flag) {
-            user.setImgpath(filePath+fileName);
+            user.setImgpath(filePath + fileName);
             int count = userService.dubAdd(user);
             if (count > 0) {
-                return "uploadimg success";
+                return "redirect:/boot/list";
             }
         }
         return "uploadfile";
@@ -105,13 +106,12 @@ public class userController {
 //    }
 
 
-
     @RequestMapping("/DelDub")
     @ResponseBody
     public Map<String, String> deldub(@RequestParam(value = "id", defaultValue = "0") Integer id) {
         int mun = userService.DelDub(id);
         Map<String, String> map = new HashMap<>();
-        System.out.println("==========="+id);
+        System.out.println("===========" + id);
         if (mun >= 1) {
             map.put("messag", "1");
             return map;
@@ -120,15 +120,13 @@ public class userController {
         }
         return map;
     }
-@RequestMapping("/uupdub")
-    public String upDub(@RequestParam("id") Integer id ,Model model){
-        User user=userService.getUpDub(id);
-        model.addAttribute("Dub",user);
+
+    @RequestMapping("/uupdub")
+    public String upDub(@RequestParam("id") Integer id, Model model) {
+        User user = userService.getUpDub(id);
+        model.addAttribute("Dub", user);
         return "upup";
-}
-
-
-
+    }
 
 
 //    public String index(User user, @RequestParam(value = "attachs", required = false)
