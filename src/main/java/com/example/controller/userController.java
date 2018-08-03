@@ -1,6 +1,5 @@
 package com.example.controller;
 
-import com.alibaba.dubbo.config.annotation.Reference;
 import com.example.common.FileUtil;
 import com.example.common.HttpAPIService;
 import com.example.common.img;
@@ -8,7 +7,6 @@ import com.example.pojo.User;
 import com.example.service.UserService;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by AcY on 2018/4/25.
+ * Created by AcY on 2018/8/3.
  */
 
 @Controller
